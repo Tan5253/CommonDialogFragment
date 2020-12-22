@@ -11,17 +11,4 @@
         <item name="android:backgroundDimEnabled">true</item>
     </style>
 
-    <style name="BottomSheetDialog" parent="@android:style/Theme.Translucent.NoTitleBar">
-        <item name="android:windowIsFloating">false</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:windowSoftInputMode">adjustResize</item>
-    </style>
-
-    <style name="myDialog" parent="@android:style/Theme.Dialog">
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:windowFrame">@null</item>
-        <item name="android:windowIsTranslucent">false</item>
-        <item name="android:windowSoftInputMode">stateVisible</item>
-    </style>
 </resources>

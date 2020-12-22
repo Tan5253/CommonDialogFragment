@@ -1,13 +1,9 @@
 package com.tan.commondialogfragment
 
-import android.app.Activity
 import android.content.Context
-import android.graphics.Rect
 import android.os.Bundle
 import android.util.DisplayMetrics
-import android.util.Log
 import android.view.*
-import android.widget.ScrollView
 import androidx.annotation.FloatRange
 import androidx.annotation.LayoutRes
 import androidx.annotation.Nullable
@@ -38,7 +34,6 @@ class CommonDialog: DialogFragment() {
     override fun onCreate(@Nullable savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NO_TITLE, setDialogStyle())
-       // mLayoutResId =setDialogLayoutId()
     }
 
     @Nullable
@@ -46,7 +41,6 @@ class CommonDialog: DialogFragment() {
         if (mLayoutResId>0){
             val view: View = inflater.inflate(mLayoutResId, container, false)
             convertListener?.convertView(DialogViewHolder.create(view), this)
-             //convertView(DialogViewHolder.create(view), this)
             return view
         }
         return null
@@ -179,14 +173,6 @@ class CommonDialog: DialogFragment() {
         return this
     }
 
-//    /**
-//     * 操作dialog布局
-//     *
-//     * @param holder
-//     * @param dialog
-//     */
-//    abstract fun convertView(holder: DialogViewHolder, dialog: BaseDialogFragment)
-
     /**
      * 获取屏幕宽度
      *
@@ -205,88 +191,6 @@ class CommonDialog: DialogFragment() {
 
     interface ViewConvertListener{
         fun convertView(holder: DialogViewHolder, dialog: CommonDialog)
-    }
-
-    /**
-     * 使键盘一直在输入框下方
-     * @param parentView 根布局
-     * @param childView 需要显示的最下方View
-     */
-    fun addLayoutListener(parentView: View, childView: View) {
-        parentView.viewTreeObserver.addOnGlobalLayoutListener {
-            val rect = Rect()
-            parentView.getWindowVisibleDisplayFrame(rect)
-            val mainInvisibleHeight: Int = parentView.rootView.height - rect.bottom
-            Log.e("da","${parentView.rootView.height}>>>>>>>>>>>>>>${rect.bottom}》》》》》》》》》$mainInvisibleHeight")
-            if (mainInvisibleHeight > 100) {
-                val location = IntArray(2)
-                childView.getLocationInWindow(location)
-                val scrollHeight: Int = location[1] + childView.rootView.height - rect.bottom
-                Log.e("da","${location[1]}>>>>>>>>22222>>>>>>${scrollHeight}》》》》》》》》》${childView.rootView.height}")
-                parentView.scrollTo(0, scrollHeight)
-            } else {
-                parentView.scrollTo(0, 0)
-            }
-        }
-    }
-
-    /**
-     *
-     * @param root 根布局View
-     * @param scrollToView 需要移动的View
-     */
-    private var firstLocation = 0
-    fun controlKeyboardLayout(root: View, scrollToView: View) {
-        root.viewTreeObserver.addOnGlobalLayoutListener {
-            val rect = Rect()
-            //获取root在窗体的可视区域
-            root.getWindowVisibleDisplayFrame(rect)
-            //获取root在窗体的不可视区域高度(被其他View遮挡的区域高度)
-           // val rootInvisibleHeight = root.rootView.height - rect.bottom
-            val rootInvisibleHeight = rect.bottom
-            //若不可视区域高度大于100，则键盘显示
-            if (rootInvisibleHeight > 100) {
-                val location = IntArray(2)
-                //获取scrollToView在窗体的坐标
-                scrollToView.getLocationInWindow(location)
-                if (firstLocation < location[1]) {
-                    firstLocation = location[1]
-                }
-                Log.e("data",  " RECT.BOTTOM = " + rect.bottom + " rootInvisibleHeight = " +
-                            rootInvisibleHeight + " location[1] = " + location[1]
-                )
-                //计算root滚动高度，使scrollToView在可见区域
-                //val srollHeight = firstLocation + scrollToView.height - rect.bottom
-                val srollHeight = firstLocation + scrollToView.height
-                Log.e("data",">>>>>>>>>>>"+srollHeight)
-                root.scrollTo(0, srollHeight)
-            } else { //键盘隐藏
-                root.scrollTo(0, 0)
-            }
-        }
-    }
-
-    fun controlKeyboardLayout1(root: View, context: Activity) {
-        root.viewTreeObserver.addOnGlobalLayoutListener {
-            val rect = Rect()
-            root.getWindowVisibleDisplayFrame(rect)
-            val rootInvisibleHeight = root.rootView.height - rect.bottom
-            //若不可视区域高度大于100，则键盘显示
-            if (rootInvisibleHeight > 100) {
-                val location = IntArray(2)
-                val focus = context.currentFocus
-                if (focus != null) {
-                    focus.getLocationInWindow(location)
-                    val scrollHeight = location[1] + focus.height - rect.bottom
-                    if (rect.bottom < location[1] + focus.height) {
-                        root.scrollTo(0, scrollHeight)
-                    }
-                }
-            } else {
-                //键盘隐藏
-                root.scrollTo(0, 0)
-            }
-        }
     }
 
 }
